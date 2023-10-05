@@ -22,14 +22,15 @@ populateDb(inputData)
 
 cur.execute('''SELECT * FROM timeAttendance ORDER BY userID''')
 
-users = cur.execute('''SELECT userID FROM timeAttendance GROUP BY userID''')
+users = cur.execute('''SELECT userID,staff FROM timeAttendance GROUP BY userID''')
 
-user = users.fetchall()[0][0]
+userIDs = users.fetchall()
 
-cur.execute('''SELECT * FROM timeAttendance WHERE userID = ?''', (user,))
+for user in userIDs:
+    cur.execute('''SELECT * FROM timeAttendance WHERE userID = ?''', (user[0],))
 
 ##for user in users.fetchall():
-print(cur.fetchall())
+print(userIDs)
 
 dataFile.close()
 con.commit()
