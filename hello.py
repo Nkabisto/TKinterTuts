@@ -1,11 +1,15 @@
 from tkinter import *
 
+def myClick():
+    txt = "Bonjour " + e.get()
+    myLabel = Label(window ,text= txt)
+    myLabel.pack()
+
 window = Tk()
 
-def myClick():
-    myLabel = Label(window ,text="Look! I clicked a Button!")
-    myLabel.pack()
-                    
+e = Entry(window, fg="Black", width = 50, borderwidth=5)
+e.pack()
+e.insert("Enter your name: ")
 
 # Creating a label widget
 ##myLabel1 = Label(root,text="Hello World!").grid(row=0, column=3)
@@ -20,3 +24,5 @@ myButton = Button(window, text="Click Me!", padx = 50, command= myClick, fg = "P
 myButton.pack()
 
 window.mainloop()
+
+
