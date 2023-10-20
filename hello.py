@@ -1,28 +1,23 @@
 from tkinter import *
+from tkinter import filedialog
 
-def myClick():
-    txt = "Bonjour " + e.get()
-    myLabel = Label(window ,text= txt)
-    myLabel.pack()
+def openfile():
+    myInitialDir = "C:/Users/Lionel/Documents/FreecodeCamp/GUI with Python and TKinter"
+    myTitle= "Open File and Attenadance text file"
+    myFileTypes = ("text files","*.txt"),("All files","*.*")
 
-window = Tk()
+    filepath = filedialog.askopenfilename(
+        title = myTitle,
+        initialdir = myInitialDir,
+        filetypes=(myFileTypes)
+    )
+    print(filepath)
 
-e = Entry(window, fg="Black", width = 50, borderwidth=5)
-e.pack()
-e.insert("Enter your name: ")
+    
+root = Tk()
 
-# Creating a label widget
-##myLabel1 = Label(root,text="Hello World!").grid(row=0, column=3)
-##myLabel2 = Label(root,text="My name is Lionel Nkabi").grid(row=2, column=3)
+#root.title('Time and Attendance System')
+button = Button(text="Open", command=openfile)
+button.pack()
 
-#shoving it onto the screen
-#myLabel1.grid(row=0, column=3)
-#myLabel2.grid(row=1, column=3)
-
-myButton = Button(window, text="Click Me!", padx = 50, command= myClick, fg = "Purple", bg = "Yellow")
-
-myButton.pack()
-
-window.mainloop()
-
-
+root.mainloop()
