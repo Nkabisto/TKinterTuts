@@ -63,7 +63,7 @@ def staffDatesAndTimesDict(attendanceData):
 
 def printToExcelWb(inputDict,staffSheet):
     inputArray = list(inputDict.items())
-    HEADERS = ['DATES','TIMES']
+    HEADERS = ['AC NO','NAME','DATE','TIME','COMMENTS']
     staffSheet.append(HEADERS)
     
     for row in inputArray:
@@ -75,7 +75,7 @@ cur = con.cursor()
 
 createTimeAndAttendanceTable() #CREATE TABLE timeAttendance
 
-INPUTFILE = 'Time and attendance from 01 Jan 2021 to 20 October 2023'
+INPUTFILE = 'Time and attendance from 22 Sep to 24 October 2023'
 populateDb(INPUTFILE)
 
 cur.execute('''SELECT * FROM timeAttendance ORDER BY ac_no''')
@@ -91,11 +91,13 @@ for e in employees:
     staffName = e[1]
     sheet = wb.create_sheet(staffName)
 
-    cur.execute('''SELECT date,time FROM timeAttendance WHERE ac_no = ?''',(staffID,))
+    cur.execute('''SELECT ac_no, name, date,time FROM timeAttendance WHERE ac_no = ? ORDER by date''',(staffID,))
 
     staffDict = staffDatesAndTimesDict(cur.fetchall())    
     printToExcelWb(staffDict,sheet)
 
+del wb['Sheet']
+    
 
 wb.save(INPUTFILE + '.xlsx')
 con.commit()
