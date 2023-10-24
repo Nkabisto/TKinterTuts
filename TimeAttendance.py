@@ -49,6 +49,22 @@ def isTimeCorrect(ctime):
 def isNameCorrect(name):
     return name.isalnum()
 
+def staffDatesAndTimes(attendanceData):
+    staffDict = {}
+    for row in attendanceData:
+        date = row[0]
+        time = row[1]
+
+        if date in staffDict.keys():
+            staffDict[date] += ' ' + time
+        else:
+            staffDict[date] = time
+    return staffDict
+        
+
+#def printToExcelFile(data):
+    
+
 con = sqlite3.connect('register.db')
 cur = con.cursor()
 
@@ -62,12 +78,18 @@ emp = cur.execute('''SELECT ac_no, staff FROM timeAttendance GROUP BY ac_no''')
 
 employees = emp.fetchall()
 
-print(employees)
+#print(employees)
 
-# Filter database by AC.No
-##for e in employees:
-##    cur.execute('''SELECT * FROM timeAttendance WHERE ac_no = ?''',(e[0])('2023-09-0
-##    
+# Filter database by employeeID number
+#for e in employees:
+staffID = 15 #e[0] 
+#staffName = e[1]
+
+cur.execute('''SELECT date,time FROM timeAttendance WHERE ac_no = ?''',(staffID,))
+
+staffD = staffDatesAndTimes(cur.fetchall())    
+print(list(staffD.items()))
+
 
 con.commit()
 con.close()
