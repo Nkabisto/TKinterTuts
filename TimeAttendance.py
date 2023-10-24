@@ -1,10 +1,9 @@
 import sqlite3
-#from openpyxl import Workbook
+from openpyxl import Workbook
 import re
 
 def populateDb(dataFile):
     with open(dataFile + '.txt','r') as file:
-        #print('AC.No','Date','Time','Staff')
         for line in file:
             newLine = line.split()
             row = [newLine[0],newLine[1],newLine[2],newLine[5]]
@@ -49,7 +48,7 @@ def isTimeCorrect(ctime):
 def isNameCorrect(name):
     return name.isalnum()
 
-def staffDatesAndTimes(attendanceData):
+def staffDatesAndTimesDict(attendanceData):
     staffDict = {}
     for row in attendanceData:
         date = row[0]
@@ -62,15 +61,21 @@ def staffDatesAndTimes(attendanceData):
     return staffDict
         
 
-#def printToExcelFile(data):
+def printToExcelWb(inputDict,staffSheet):
+    inputArray = list(inputDict.items())
+    HEADERS = ['DATES','TIMES']
+    staffSheet.append(HEADERS)
     
+    for row in inputArray:
+        staffSheet.append(list(row))
+        
 
-con = sqlite3.connect('register.db')
-cur = con.cursor()
+con = sqlite3.connect('register.db') # create a new database named register
+cur = con.cursor()      
 
-createTimeAndAttendanceTable(); #CREATE TABLE timeAttendance
+createTimeAndAttendanceTable() #CREATE TABLE timeAttendance
 
-INPUTFILE = 'testing'
+INPUTFILE = 'Time and attendance from 01 Jan 2021 to 20 October 2023'
 populateDb(INPUTFILE)
 
 cur.execute('''SELECT * FROM timeAttendance ORDER BY ac_no''')
@@ -78,20 +83,21 @@ emp = cur.execute('''SELECT ac_no, staff FROM timeAttendance GROUP BY ac_no''')
 
 employees = emp.fetchall()
 
-#print(employees)
+wb = Workbook()
 
 # Filter database by employeeID number
-#for e in employees:
-staffID = 15 #e[0] 
-#staffName = e[1]
+for e in employees:
+    staffID = e[0] 
+    staffName = e[1]
+    sheet = wb.create_sheet(staffName)
 
-cur.execute('''SELECT date,time FROM timeAttendance WHERE ac_no = ?''',(staffID,))
+    cur.execute('''SELECT date,time FROM timeAttendance WHERE ac_no = ?''',(staffID,))
 
-staffD = staffDatesAndTimes(cur.fetchall())    
-print(list(staffD.items()))
+    staffDict = staffDatesAndTimesDict(cur.fetchall())    
+    printToExcelWb(staffDict,sheet)
 
 
+wb.save(INPUTFILE + '.xlsx')
 con.commit()
 con.close()
-
 
