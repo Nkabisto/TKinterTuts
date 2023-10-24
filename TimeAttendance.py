@@ -20,9 +20,9 @@ def createTimeAndAttendanceTable():
 def dataValidation(acNo,date,time,name):
     if not isStaffIDCorrect(acNo):
         raise Exception('Staff no.: ' + acNo + ' is incorrect')
-##
-##    if not isDateCorrect(date):
-##        raise Exception('Date: ' + date + ' is incorrect')
+
+    if not isDateCorrect(date):
+        raise Exception('Date: ' + date + ' is incorrect')
 ##
 ##    if not isTimeCorrect(ctime):
 ##        raise Exception('Time: ' + time + ' is incorrect')
@@ -37,14 +37,14 @@ def isStaffIDCorrect(staffID):
 def isDateCorrect(cdate):
     datePattern = r'\d{4}-\d{2}-\d{2}'
     dateRegex = re.compile(datePattern)
-    res = dateRegex.search(cdate)
-    return res.match != None
+    match = dateRegex.search(cdate)
+    return match != None
     
 def isTimeCorrect(ctime):
     timePattern = r'\d{4}-\d{2}-\d{2}'
     timeRegex = re.compile(timePattern)
-    res = timeRegex.search(cdate)
-    return res.match != None
+    match = timeRegex.search(cdate)
+    return match != None
 
 def isNameCorrect(name):
     return name.isalnum()
