@@ -23,12 +23,12 @@ def dataValidation(acNo,date,time,name):
 
     if not isDateCorrect(date):
         raise Exception('Date: ' + date + ' is incorrect')
-##
-##    if not isTimeCorrect(ctime):
-##        raise Exception('Time: ' + time + ' is incorrect')
-##
-##    if not isNameCorrect(name):
-##        raise Exception('Staff label: ' + name + ' is incorrect')
+
+    if not isTimeCorrect(time):
+        raise Exception('Time: ' + time + ' is incorrect')
+
+    if not isNameCorrect(name):
+        raise Exception('Staff label: ' + name + ' is incorrect')
     
 
 def isStaffIDCorrect(staffID):
@@ -41,9 +41,9 @@ def isDateCorrect(cdate):
     return match != None
     
 def isTimeCorrect(ctime):
-    timePattern = r'\d{4}-\d{2}-\d{2}'
+    timePattern = r'\d{2}:\d{2}:\d{2}'
     timeRegex = re.compile(timePattern)
-    match = timeRegex.search(cdate)
+    match = timeRegex.search(ctime)
     return match != None
 
 def isNameCorrect(name):
