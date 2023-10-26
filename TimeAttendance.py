@@ -61,13 +61,13 @@ def staffDatesAndTimesDict(attendanceData):
     return staffDict
         
 
-def printToExcelWb(inputDict,staffSheet):
+def printToExcelWb(acNo,name,inputDict,staffSheet):
     inputArray = list(inputDict.items())
     HEADERS = ['AC NO','NAME','DATE','TIME','COMMENTS']
     staffSheet.append(HEADERS)
     
     for row in inputArray:
-        staffSheet.append(list(row))
+        staffSheet.append([acNo,name] + list(row))
         
 
 con = sqlite3.connect('register.db') # create a new database named register
@@ -91,10 +91,10 @@ for e in employees:
     staffName = e[1]
     sheet = wb.create_sheet(staffName)
 
-    cur.execute('''SELECT ac_no, name, date,time FROM timeAttendance WHERE ac_no = ? ORDER by date''',(staffID,))
+    cur.execute('''SELECT date,time FROM timeAttendance WHERE ac_no = ? ORDER by date,time''',(staffID,))
 
     staffDict = staffDatesAndTimesDict(cur.fetchall())    
-    printToExcelWb(staffDict,sheet)
+    printToExcelWb(staffID,staffName,staffDict,sheet)
 
 del wb['Sheet']
     
