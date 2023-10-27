@@ -1,5 +1,6 @@
 import sqlite3
 from openpyxl import Workbook
+from openpyxl.styles import Font
 import re
 
 def populateDb(dataFile):
@@ -65,9 +66,14 @@ def printToExcelWb(acNo,name,inputDict,staffSheet):
     inputArray = list(inputDict.items())
     HEADERS = ['AC NO','NAME','DATE','TIME','COMMENTS']
     staffSheet.append(HEADERS)
-    
+        
     for row in inputArray:
         staffSheet.append([acNo,name] + list(row))
+
+def boldCells(sheet):
+    row = sheet.row_dimensions[1]
+    row.font = Font(bold=True)
+    
         
 
 con = sqlite3.connect('register.db') # create a new database named register
@@ -95,6 +101,7 @@ for e in employees:
 
     staffDict = staffDatesAndTimesDict(cur.fetchall())    
     printToExcelWb(staffID,staffName,staffDict,sheet)
+    boldCells(sheet) # make headers bold
 
 del wb['Sheet']
     
