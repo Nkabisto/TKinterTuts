@@ -70,10 +70,11 @@ def printToExcelWb(acNo,name,inputDict,staffSheet):
     for row in inputArray:
         staffSheet.append([acNo,name] + list(row))
 
-def boldCells(sheet):
-    row = sheet.row_dimensions[1]
-    row.font = Font(bold=True)
-    
+def boldCells(sh):
+    #row = sheet.row_dimensions[1]
+    #row.font = Font(bold=True)
+    for c in range(1,6):
+        sh.cell(1,c).font = Font(bold=True)
         
 
 con = sqlite3.connect('register.db') # create a new database named register
